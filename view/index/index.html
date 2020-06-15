@@ -20,18 +20,17 @@
     </p>
     <p>The goal of life is to be happy</p>
 </div>
+{volist name="target_list" id="vo"}
 <div class="m2 t-c f36 colorbox clearfix">
-
-
-    <div class="col-4 color-success"> target</div>
-    <div class="col-4 color-info"> 总次数</div>
-    <div class="col-4 color-primary">今天打卡</div>
-    {volist name="target_list" id="vo"}
-    <div class="col-4 color-success"> {$vo.name}</div>
-    <div class="col-4 color-primary"> {$vo.total_num}</div>
-    <div class="col-4 color-warning clock_in" target_id="{$vo.id}"> {$vo.status_desc}</div>
-    {/volist}
+    <div class="col-12 color-info"> {$vo.name}</div>
+    <div class="col-6 color-primary">今天打卡</div>
+    <div class="col-6 color-warning clock_in" target_id="{$vo.id}"> {$vo.status_desc}</div>
+    <div class="col-6 color-primary">奖励金（次）</div>
+    <div class="col-6 color-primary">{$vo.money}</div>
+    <div class="col-6 color-primary">总金额</div>
+    <div class="col-6 color-primary"> {$vo.total_num}/{$vo.total_money}</div>
 </div>
+{/volist}
 <br/>
 <style>
     .colorbox {
@@ -39,7 +38,15 @@
         border-right: 1px solid #F1F1F1;
     }
 
-    .col-4 {
+    .col-12 {
+        border-left: 1px solid #F1F1F1;
+        border-top: 1px solid #F1F1F1;
+        padding: 0 0.3rem;
+        line-height: 1.8em;
+        text-align: center;
+    }
+
+    .col-6 {
         border-left: 1px solid #F1F1F1;
         border-top: 1px solid #F1F1F1;
         padding: 0 0.3rem;

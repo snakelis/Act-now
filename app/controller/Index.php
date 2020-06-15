@@ -29,6 +29,7 @@ class Index extends Base
         $field = [
             'target.id',
             'target.name',
+            'target.money',
             'target_record.clock_in_data',
             'target_record.status'
         ];
@@ -44,8 +45,10 @@ class Index extends Base
                 $item['status'] = 0;
             }
             $item['total_num'] = !empty($target_total[$item['id']]['total_num']) ? $target_total[$item['id']]['total_num'] : 0;
+            $item['total_money'] = $item['total_num'] * $item['money'];
             $item['status_desc'] = self::STATUS[$item['status']];
         }
+
 
         View::assign('target_list', $target_list);
 
