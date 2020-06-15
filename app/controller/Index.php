@@ -67,7 +67,7 @@ class Index extends Base
             return $this->error_json('please choose target!');
         }
         $today = date('Y-m-d');
-        $target_detail = Db::table('act_target_record')->alias('target_record')->where('clock_in_data = "' . $today . '"')->group('target_id')->find();
+        $target_detail = Db::table('act_target_record')->alias('target_record')->where('clock_in_data = "' . $today . '" and target_id = ' . $target_id)->group('target_id')->find();
         if (!empty($target_detail)) {
             if ($target_detail['status'] != 1) {
                 $update_data = [
