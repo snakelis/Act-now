@@ -9,7 +9,7 @@ class Index extends Base
 {
 
     CONST STATUS = [
-        0 => '立即打卡',
+        0 => '未打卡',
         1 => '打卡完成',
     ];
 
