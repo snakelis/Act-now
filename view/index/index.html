@@ -16,10 +16,16 @@
     </h2>
     <br>
     <p>
-
     </p>
     <p>The goal of life is to be happy</p>
 </div>
+
+<div class="w73 m1 color8 t-c clearfix f36 boxs">
+    <div class="w73 h12 mr1  fl bg-color-primary">
+        <br>总奖励金： {$total_money}
+    </div>
+</div>
+
 {volist name="target_list" id="vo"}
 <div class="m2 t-c f36 colorbox clearfix">
     <div class="col-12 color-info"> {$vo.name}</div>
@@ -27,8 +33,8 @@
     <div class="col-6 color-warning clock_in" target_id="{$vo.id}"> {$vo.status_desc}</div>
     <div class="col-6 color-primary">奖励金（次）</div>
     <div class="col-6 color-primary">{$vo.money}</div>
-    <div class="col-6 color-primary">总金额</div>
-    <div class="col-6 color-primary"> {$vo.total_num}/{$vo.total_money}</div>
+    <div class="col-6 color-primary">小计</div>
+    <div class="col-6 color-primary"> {$vo.total_money}</div>
 </div>
 {/volist}
 <br/>

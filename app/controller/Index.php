@@ -23,6 +23,7 @@ class Index extends Base
      */
     public function index()
     {
+        $total_money = 0;
 
         $today = date('Y-m-d');
 
@@ -47,10 +48,13 @@ class Index extends Base
             $item['total_num'] = !empty($target_total[$item['id']]['total_num']) ? $target_total[$item['id']]['total_num'] : 0;
             $item['total_money'] = $item['total_num'] * $item['money'];
             $item['status_desc'] = self::STATUS[$item['status']];
+
+            $total_money += $item['total_money'];
         }
 
 
         View::assign('target_list', $target_list);
+        View::assign('total_money', $total_money);
 
         return View::fetch();
     }
