@@ -1,0 +1,74 @@
+{include file="layout/header" /}
+
+
+<body class="pb1 fadeIn animated">
+<header class="ui-header clearfix w75 h8 f46 pl3 pr3 color8 bg-color-primary t-c">
+    <div class="ui-header-l fl w5">
+        <a href="index.html" class="icon color8 iconfont icon-home_light"></a>
+    </div>
+    <div class="ui-header-c fl f30 w59">
+        Act now
+    </div>
+</header>
+<div class="t-c f32 p6 color4 bg-color6">
+    <h2 class="color-danger f46">
+        生活的目标是快乐！
+    </h2>
+    <br>
+    <p>
+
+    </p>
+    <p>The goal of life is to be happy</p>
+</div>
+<div class="m2 t-c f36 colorbox clearfix">
+
+
+    <div class="col-4 color-success"> target</div>
+    <div class="col-4 color-info"> 总次数</div>
+    <div class="col-4 color-primary">今天打卡</div>
+    {volist name="target_list" id="vo"}
+    <div class="col-4 color-success"> {$vo.name}</div>
+    <div class="col-4 color-primary"> {$vo.total_num}</div>
+    <div class="col-4 color-warning clock_in" target_id="{$vo.id}"> {$vo.status_desc}</div>
+    {/volist}
+</div>
+<br/>
+<style>
+    .colorbox {
+        border-bottom: 1px solid #F1F1F1;
+        border-right: 1px solid #F1F1F1;
+    }
+
+    .col-4 {
+        border-left: 1px solid #F1F1F1;
+        border-top: 1px solid #F1F1F1;
+        padding: 0 0.3rem;
+        line-height: 1.8em;
+        text-align: center;
+    }
+
+</style>
+</body>
+
+<script type="text/javascript">
+    $('.clock_in').click(function () {
+        var target_id = $(this).attr('target_id');
+        var url = "clock_in?target_id=" + target_id;
+        $.ajax({
+            url: url,
+            type: 'get',
+            data: '',
+            dataType: "json",
+            success: function (data) {
+                if (data.status != 1) {
+                    alert('失败!')
+                } else {
+                    window.location.reload()
+                }
+            }
+        });
+    })
+</script>
+
+{include file="layout/footer" /}
+

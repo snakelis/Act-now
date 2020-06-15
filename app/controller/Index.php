@@ -1,17 +1,86 @@
 <?php
+
 namespace app\controller;
 
-use app\BaseController;
+use think\facade\Db;
+use think\facade\View;
 
-class Index extends BaseController
+class Index extends Base
 {
+
+    CONST STATUS = [
+        0 => '立即打卡',
+        1 => '打卡完成',
+    ];
+
+    /**
+     * @description
+     * @param string $name
+     * @return string
+     * @throws
+     * @author  李顺
+     * @create : 2020/6/15 14:23
+     */
     public function index()
     {
-        return '<style type="text/css">*{ padding: 0; margin: 0; } div{ padding: 4px 48px;} a{color:#2E5CD5;cursor: pointer;text-decoration: none} a:hover{text-decoration:underline; } body{ background: #fff; font-family: "Century Gothic","Microsoft yahei"; color: #333;font-size:18px;} h1{ font-size: 100px; font-weight: normal; margin-bottom: 12px; } p{ line-height: 1.6em; font-size: 42px }</style><div style="padding: 24px 48px;"> <h1>:) 2020新春快乐</h1><p> ThinkPHP V' . \think\facade\App::version() . '<br/><span style="font-size:30px;">14载初心不改 - 你值得信赖的PHP框架</span></p><span style="font-size:25px;">[ V6.0 版本由 <a href="https://www.yisu.com/" target="yisu">亿速云</a> 独家赞助发布 ]</span></div><script type="text/javascript" src="https://tajs.qq.com/stats?sId=64890268" charset="UTF-8"></script><script type="text/javascript" src="https://e.topthink.com/Public/static/client.js"></script><think id="ee9b1aa918103c4fc"></think>';
+
+        $today = date('Y-m-d');
+
+        $field = [
+            'target.id',
+            'target.name',
+            'target_record.clock_in_data',
+            'target_record.status'
+        ];
+        $target_list = Db::table('act_target')->alias('target')->field($field)->leftJoin('act_target_record target_record', 'target_record.target_id = target.id and target_record.clock_in_data = "' . $today . '"')->select();
+
+        $target_total = Db::table('act_target_record')->alias('target_record')->field('count(id) as total_num,target_id')->where('status = 1')->group('target_id')->select();
+        $target_total = $target_total->toArray();
+        $target_total = array_column($target_total, null, 'target_id');
+
+        $target_list = $target_list->toArray();
+        foreach ($target_list as &$item) {
+            if (empty($item['clock_in_data'])) {
+                $item['status'] = 0;
+            }
+            $item['total_num'] = !empty($target_total[$item['id']]['total_num']) ? $target_total[$item['id']]['total_num'] : 0;
+            $item['status_desc'] = self::STATUS[$item['status']];
+        }
+
+        View::assign('target_list', $target_list);
+
+        return View::fetch();
     }
 
-    public function hello($name = 'ThinkPHP6')
+
+    public function clock_in()
     {
-        return 'hello,' . $name;
+        $target_id = $this->request->param('target_id');
+        if (empty($target_id)) {
+            return $this->error_json('please choose target!');
+        }
+        $today = date('Y-m-d');
+        $target_detail = Db::table('act_target_record')->alias('target_record')->where('clock_in_data = "' . $today . '"')->group('target_id')->find();
+        if (!empty($target_detail)) {
+            if ($target_detail['status'] != 1) {
+                $update_data = [
+                    'status' => 1
+                ];
+            } else {
+                $update_data = [
+                    'status' => 0
+                ];
+            }
+            Db::table('act_target_record')->where('id', $target_detail['id'])->update($update_data);
+        } else {
+            $save_data = [
+                'target_id' => $target_id,
+                'clock_in_data' => $today,
+                'status' => 1,
+            ];
+            Db::table('act_target_record')->insert($save_data);
+        }
+
+        return $this->success_json();
     }
 }
