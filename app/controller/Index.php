@@ -34,7 +34,11 @@ class Index extends Base
             'target_record.clock_in_data',
             'target_record.status'
         ];
-        $target_list = Db::table('act_target')->alias('target')->field($field)->leftJoin('act_target_record target_record', 'target_record.target_id = target.id and target_record.clock_in_data = "' . $today . '"')->select();
+        $target_list = Db::table('act_target')->alias('target')
+            ->field($field)
+            ->leftJoin('act_target_record target_record', 'target_record.target_id = target.id and target_record.clock_in_data = "' . $today . '"')
+            ->order('sort desc')
+            ->select();
 
         $target_total = Db::table('act_target_record')->alias('target_record')->field('count(id) as total_num,target_id')->where('status = 1')->group('target_id')->select();
         $target_total = $target_total->toArray();

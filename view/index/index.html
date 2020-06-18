@@ -28,13 +28,13 @@
 
 {volist name="target_list" id="vo"}
 <div class="m2 t-c f36 colorbox clearfix">
-    <div class="col-12 color-info"> {$vo.name}</div>
-    <div class="col-6 color-primary">今天打卡</div>
-    <div class="col-6 color-warning clock_in" target_id="{$vo.id}"> {$vo.status_desc}</div>
+    <div class="col-12 color-info "> {$vo.name}</div>
+    <div class="col-6 color-primary ">今天打卡</div>
+    <div class="col-6 color-warning clock_in {if $vo.status == 1} bg-color-success {else /} bg-color-danger{/if} " target_id="{$vo.id}"> {$vo.status_desc}</div>
     <div class="col-6 color-primary">奖励金（次）</div>
-    <div class="col-6 color-primary">{$vo.money}</div>
+    <div class="col-6 color-primary ">{$vo.money}</div>
     <div class="col-6 color-primary">小计</div>
-    <div class="col-6 color-primary"> {$vo.total_money}</div>
+    <div class="col-6 color-primary"> {$vo.total_money}   ({$vo.total_num}次)</div>
 </div>
 {/volist}
 <br/>
